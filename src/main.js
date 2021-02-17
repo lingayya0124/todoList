@@ -1,9 +1,8 @@
-import { createApp, Vue } from "vue";
+import Vue from "vue";
+import VueRouter from "vue-router";
 import App from "./App.vue";
-import router from "./router";
+import Routes from "./routes";
 import firebase from "firebase";
-
-/*we need to use environment key*/
 
 var firebaseConfig = {
   apiKey: "AIzaSyAeo9aBOIGK3w5jJ1H8Lyuku2bdvKU-4uo",
@@ -14,9 +13,16 @@ var firebaseConfig = {
   appId: "1:165903273782:web:4d6606cedb20a4dfd22d97",
   measurementId: "G-M7FNTLQBDT",
 };
+Vue.use(VueRouter);
+const router = new VueRouter({
+  routes: Routes,
+  mode: "history",
+});
 
 firebase.initializeApp(firebaseConfig);
 
-createApp(App)
-  .use(router)
-  .mount("#app");
+new Vue({
+  el: "#app",
+  render: (h) => h(App),
+  router: router,
+});

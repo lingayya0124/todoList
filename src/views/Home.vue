@@ -1,55 +1,57 @@
 <template>
   <div class="home">
-  <h1>Welcome {{name}}</h1>
-  <br>
-<button class="logout_bt" @click="Logout">Logout</button>
+    <h1>Welcome {{ name }}</h1>
+    <br />
+    <button class="logout_bt" @click="Logout">Logout</button>
   </div>
 </template>
 
 <script>
-import {ref,onBeforeMount} from 'vue';
-import firebase from 'firebase';
+import router from "vue-router";
+import firebase from "firebase";
+
 export default {
-  setup(){
-  
-    const name = ref("");
-   onBeforeMount(()=>{
-       const user =  firebase.auth().currentUser;
-     if (user) {
-       name.value = user.email.split('@')[0];
-       
-     }
-   });
+  data: function () {
+    return {
+      name: "",
+    };
+  },
 
-   const Logout = () =>
-   {
-     firebase
-     .auth()
-     .signOut()
-     .then(()=>console.log('Signed out'))
-     .catch(err => alert(err.message));
-   }
+  beforeMount: function () {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      this.name = user.email.split("@")[0];
+    } else {
+      this.$router.push("/login");
+    }
+  },
 
-    return{name,Logout}
-
-  }
-
-}
+  methods: {
+    Logout: function () {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.push("/login");
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>
-.home{
+.home {
   width: 280px;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   color: white;
 }
-h1{
-  color:  #4caf50;;
+h1 {
+  color: #4caf50;
 }
-.logout_bt{
+.logout_bt {
   width: 100%;
   background: none;
   border: 2px solid #4caf50;

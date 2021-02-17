@@ -1,33 +1,11 @@
 <template>
-  <router-view/>
+  <router-view />
 </template>
 <script>
-import {onBeforeMount} from 'vue';
-import {useRouter, useRoute} from 'vue-router';
-import firebase from 'firebase';
-export default {
-  setup(){
-    const router = useRouter();
-    const route = useRoute();
-    onBeforeMount(() =>{
-      firebase.auth().onAuthStateChanged((user)=>{
-        if(!user)
-        {
-          router.replace('/login');
-        }
-        else if(route.path == "/login" || route.path == "/signup")
-        {
-          router.replace('/');
-        }
-      })
-    })
-
-  }
-}
 </script>
 <style>
-body{
+body {
   background: #2c3e50;
-  color:#fff;
+  color: #fff;
 }
 </style>
