@@ -33,6 +33,7 @@
 import firebase from "firebase";
 import router from "vue-router";
 export default {
+  name: "login",
   data: function () {
     return {
       email: "",
