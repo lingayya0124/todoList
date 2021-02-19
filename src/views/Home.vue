@@ -1,22 +1,85 @@
 <template>
   <div class="home">
-    <h1>Welcome {{ name }}</h1>
-    <br />
-    <button class="logout_bt" @click="Logout">Logout</button>
+    <div class="container d-flex justify-content-center">
+      <div class="card mt-3 shadow-sm w-100">
+        <div class="card-header bg-dark">
+          <b-row>
+            <b-col md="4">
+              <h4 class="">Todo List</h4>
+            </b-col>
+            <b-col md="6">
+              <h3>Welcome {{ name }}</h3>
+            </b-col>
+            <b-col md="">
+              <b-button variant="outline-primary" @click="Logout"
+                >Logout</b-button
+              >
+            </b-col>
+          </b-row>
+        </div>
+        <div class="card-body" style="background-color: #4caf50">
+          <div class="input-container row mt-3" style="color: #4caf50">
+            <input
+              type="text"
+              id="new_todo"
+              class="form-control ml-3 col-9 validate"
+              v-model="todo.title"
+              @keyup.enter="addTodo"
+            />
+            <i
+              class="fas fa-plus col-1 ml-2 fa-2x"
+              style="color: yellow"
+              @click="addTodo"
+            ></i>
+          </div>
+
+          <ul class="list-group mt-3" style="color: #4caf50">
+            <li
+              class="list-group-item d-flex align-items-center justify-content-between"
+              v-for="todo in todos"
+              :key="todo.id"
+              :class="{ fade: todo.isCompleted }"
+            >
+              <i
+                class="fas fa-minus"
+                style="color: yellow size:20px"
+                @click="deleteToDo(todo.id)"
+              ></i>
+              {{ todo.title }}
+              <span class="secondary-content">
+                <label>
+                  <input
+                    type="checkbox"
+                    class="filled-in"
+                    :checked="todo.isCompleted"
+                    @change="updateTodoItem(todo.id, $event)"
+                  />
+                  <span></span>
+                </label>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import router from "vue-router";
 import firebase from "firebase";
-
 export default {
-  data: function () {
+  data() {
     return {
+      todos: [],
+      todo: {
+        title: "",
+      },
       name: "",
     };
   },
-
+  created() {
+    this.getTodos();
+  },
   beforeMount: function () {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -27,6 +90,54 @@ export default {
   },
 
   methods: {
+    addTodo() {
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(firebase.auth().currentUser.uid)
+        .collection("todos")
+        .add({
+          title: this.todo.title,
+          isCompleted: false,
+        });
+    },
+    async getTodos() {
+      var todosRef = await firebase
+        .firestore()
+        .collection("users")
+        .doc(firebase.auth().currentUser.uid)
+        .collection("todos");
+      console.log(firebase.auth().currentUser);
+      todosRef.onSnapshot((snap) => {
+        this.todos = [];
+        snap.forEach((doc) => {
+          var todo = doc.data();
+          todo.id = doc.id;
+          this.todos.push(todo);
+        });
+      });
+    },
+    updateTodoItem(docId, e) {
+      var isChecked = e.target.checked;
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(firebase.auth().currentUser.uid)
+        .collection("todos")
+        .doc(docId)
+        .update({
+          isCompleted: isChecked,
+        });
+    },
+    deleteToDo(docId) {
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(firebase.auth().currentUser.uid)
+        .collection("todos")
+        .doc(docId)
+        .delete();
+    },
     Logout: function () {
       firebase
         .auth()
@@ -40,25 +151,8 @@ export default {
 </script>
 
 <style scoped>
-.home {
-  width: 280px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-}
-h1 {
-  color: #4caf50;
-}
-.logout_bt {
-  width: 100%;
-  background: none;
-  border: 2px solid #4caf50;
-  color: white;
-  padding: 5px;
-  font-size: 18px;
-  cursor: pointer;
-  margin: 12px 0;
+.fade {
+  text-decoration: line-through;
+  opacity: 0.4 !important;
 }
 </style>
