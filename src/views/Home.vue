@@ -10,8 +10,8 @@
             <b-col md="6">
               <h3>Welcome {{ name }}</h3>
             </b-col>
-            <b-col md="">
-              <b-button variant="outline-primary" @click="Logout"
+            <b-col md="0">
+              <b-button variant="outline-primary float-right" @click="Logout"
                 >Logout</b-button
               >
             </b-col>
@@ -45,18 +45,48 @@
                 style="color: yellow size:20px"
                 @click="deleteToDo(todo.id)"
               ></i>
-              {{ todo.title }}
-              <span class="secondary-content">
-                <label>
-                  <input
-                    type="checkbox"
-                    class="filled-in"
-                    :checked="todo.isCompleted"
-                    @change="updateTodoItem(todo.id, $event)"
-                  />
-                  <span></span>
-                </label>
-              </span>
+              <div class="col-sm-7" v-if="currentlyEditing !== todo.id">
+                <input
+                  disabled
+                  type="text"
+                  class="todo-item-label form-control col-xs-4 border-0"
+                  v-model="todo.title"
+                  value=" todo.title"
+                />
+              </div>
+              <div class="col-sm-7" v-else>
+                <input
+                  :disabled="disabled == 0"
+                  type="text"
+                  class="todo-item-label form-control col-xs-4"
+                  v-model="todoEditText"
+                  value=" todoEditText"
+                  @keyup.enter.prevent="updateTodoText(todo.id, $event)"
+                />
+                <b-button
+                  class="col"
+                  variant="outline-success float-right"
+                  @click="updateTodoText(todo.id, $event)"
+                  >Save</b-button
+                >
+              </div>
+
+              <div>
+                <i class="fas fa-edit mr-2" @click="editTodo(todo)"></i>
+
+                <span class="secondary-content">
+                  <label>
+                    <input
+                      disabled
+                      type="checkbox"
+                      class="filled-in"
+                      :checked="todo.isCompleted"
+                      @change="updateTodoItem(todo.id, $event)"
+                    />
+                    <span></span>
+                  </label>
+                </span>
+              </div>
             </li>
           </ul>
         </div>
@@ -70,7 +100,11 @@ import firebase from "firebase";
 export default {
   data() {
     return {
+      disabled: 1,
+      check: true,
       todos: [],
+      currentlyEditing: null,
+      todoEditText: "",
       todo: {
         title: "",
       },
@@ -79,6 +113,7 @@ export default {
   },
   created() {
     this.getTodos();
+    this.disabled = this.disabled;
   },
   beforeMount: function () {
     const user = firebase.auth().currentUser;
@@ -90,16 +125,29 @@ export default {
   },
 
   methods: {
+    editTodo(todo) {
+      this.currentlyEditing = todo.id;
+      this.todoEditText = todo.title;
+
+      console.log(this.todoEditText);
+      console.log(this.currentlyEditing);
+    },
     addTodo() {
-      firebase
-        .firestore()
-        .collection("users")
-        .doc(firebase.auth().currentUser.uid)
-        .collection("todos")
-        .add({
-          title: this.todo.title,
-          isCompleted: false,
-        });
+      if (!this.todo.title == "") {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(firebase.auth().currentUser.uid)
+          .collection("todos")
+          .add({
+            title: this.todo.title,
+            createdAt: new Date(),
+            isCompleted: false,
+          });
+        this.todo.title = "";
+      } else {
+        alert("Add Something");
+      }
     },
     async getTodos() {
       var todosRef = await firebase
@@ -113,6 +161,7 @@ export default {
         snap.forEach((doc) => {
           var todo = doc.data();
           todo.id = doc.id;
+
           this.todos.push(todo);
         });
       });
@@ -129,6 +178,23 @@ export default {
           isCompleted: isChecked,
         });
     },
+    updateTodoText(docId, e) {
+      var text = this.todoEditText;
+
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(firebase.auth().currentUser.uid)
+        .collection("todos")
+        .doc(docId)
+        .update({
+          title: text,
+        });
+      this.currentlyEditing = null;
+
+      this.getTodos();
+    },
+
     deleteToDo(docId) {
       firebase
         .firestore()
