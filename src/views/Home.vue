@@ -18,28 +18,16 @@
           </b-row>
         </div>
         <div class="card-body" style="background-color: #4caf50">
-<<<<<<< HEAD
           <div class="input-container row m-0 mt-3">
             <input
               type="text"
               id="new_todo"
               class="form-control col-md-11 validate"
-=======
-          <div class="input-container row mt-3" style="color: #4caf50">
-            <input
-              type="text"
-              id="new_todo"
-              class="form-control ml-3 col-9 validate"
->>>>>>> ddbdad356501bec353a04647084321891388919d
               v-model="todo.title"
               @keyup.enter="addTodo"
             />
             <i
-<<<<<<< HEAD
               class="fas fa-plus col-1 fa-2x"
-=======
-              class="fas fa-plus col-1 ml-2 fa-2x"
->>>>>>> ddbdad356501bec353a04647084321891388919d
               style="color: yellow"
               @click="addTodo"
             ></i>
@@ -51,25 +39,17 @@
               v-for="todo in todos"
               :key="todo.id"
               :class="{ fade: todo.isCompleted }"
-<<<<<<< HEAD
               v-bind:style="{ backgroundColor: todo.color }"
             >
               <i
                 class="fas fa-minus"
                 style="color:  #4caf50 size:20px"
-=======
-            >
-              <i
-                class="fas fa-minus"
-                style="color: yellow size:20px"
->>>>>>> ddbdad356501bec353a04647084321891388919d
                 @click="deleteToDo(todo.id)"
               ></i>
               <div class="col-sm-7" v-if="currentlyEditing !== todo.id">
                 <input
                   disabled
                   type="text"
-<<<<<<< HEAD
                   style="font-weight: bold color:white"
                   class="todo-item-label form-control col-xs-4 border-0"
                   v-model="todo.title"
@@ -77,30 +57,18 @@
                   v-bind:style="{
                     backgroundColor: todo.color,
                   }"
-=======
-                  class="todo-item-label form-control col-xs-4 border-0"
-                  v-model="todo.title"
-                  value=" todo.title"
->>>>>>> ddbdad356501bec353a04647084321891388919d
                 />
               </div>
               <div class="col-sm-7" v-else>
                 <input
-<<<<<<< HEAD
                   :disabled="disabled == 1"
                   type="text"
                   class="todo-item-label form-control col-xs-4"
                   v-bind:style="{ backgroundColor: todo.color }"
-=======
-                  :disabled="disabled == 0"
-                  type="text"
-                  class="todo-item-label form-control col-xs-4"
->>>>>>> ddbdad356501bec353a04647084321891388919d
                   v-model="todoEditText"
                   value=" todoEditText"
                   @keyup.enter.prevent="updateTodoText(todo.id, $event)"
                 />
-<<<<<<< HEAD
                 <div class="justify-content-center">
                   <b-button
                     class="mr-1"
@@ -110,8 +78,8 @@
                   >
 
                   <b-dropdown id="dropdown-1" text="Theme" class="m-xs-1">
-                    <div class="btn-group-md">
-                      <b-dropdown-item class="default">
+                    <div class="btn-group-md bg-dark">
+                      <b-dropdown-item class="default justify content center">
                         <b-button
                           v-on:click="
                             {
@@ -171,23 +139,6 @@
                   <label>
                     <input
                       :disabled="disabled == 0"
-=======
-                <b-button
-                  class="col"
-                  variant="outline-success float-right"
-                  @click="updateTodoText(todo.id, $event)"
-                  >Save</b-button
-                >
-              </div>
-
-              <div>
-                <i class="fas fa-edit mr-2" @click="editTodo(todo)"></i>
-
-                <span class="secondary-content">
-                  <label>
-                    <input
-                      disabled
->>>>>>> ddbdad356501bec353a04647084321891388919d
                       type="checkbox"
                       class="filled-in"
                       :checked="todo.isCompleted"
@@ -212,10 +163,7 @@
 
 <script>
 import firebase from "firebase";
-<<<<<<< HEAD
 
-=======
->>>>>>> ddbdad356501bec353a04647084321891388919d
 export default {
   data() {
     return {
@@ -226,10 +174,7 @@ export default {
       todoEditText: "",
       todo: {
         title: "",
-<<<<<<< HEAD
         color: "white",
-=======
->>>>>>> ddbdad356501bec353a04647084321891388919d
       },
       name: "",
     };
@@ -248,7 +193,6 @@ export default {
   },
 
   methods: {
-<<<<<<< HEAD
     theme(todo) {
       var color = todo.color;
       var id = todo.id;
@@ -272,15 +216,6 @@ export default {
       console.log(this.currentlyEditing);
     },
 
-=======
-    editTodo(todo) {
-      this.currentlyEditing = todo.id;
-      this.todoEditText = todo.title;
-
-      console.log(this.todoEditText);
-      console.log(this.currentlyEditing);
-    },
->>>>>>> ddbdad356501bec353a04647084321891388919d
     addTodo() {
       if (!this.todo.title == "") {
         firebase
@@ -290,10 +225,7 @@ export default {
           .collection("todos")
           .add({
             title: this.todo.title,
-<<<<<<< HEAD
             color: this.todo.color,
-=======
->>>>>>> ddbdad356501bec353a04647084321891388919d
             createdAt: new Date(),
             isCompleted: false,
           });
@@ -320,10 +252,7 @@ export default {
       });
     },
     updateTodoItem(docId, e) {
-<<<<<<< HEAD
       console.log(docId);
-=======
->>>>>>> ddbdad356501bec353a04647084321891388919d
       var isChecked = e.target.checked;
       firebase
         .firestore()
@@ -337,10 +266,7 @@ export default {
     },
     updateTodoText(docId, e) {
       var text = this.todoEditText;
-<<<<<<< HEAD
       this.disabled = !this.disabled;
-=======
->>>>>>> ddbdad356501bec353a04647084321891388919d
 
       firebase
         .firestore()
@@ -380,10 +306,6 @@ export default {
 <style scoped>
 .fade {
   text-decoration: line-through;
-<<<<<<< HEAD
   opacity: 0.6 !important;
-=======
-  opacity: 0.4 !important;
->>>>>>> ddbdad356501bec353a04647084321891388919d
 }
 </style>
