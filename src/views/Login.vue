@@ -36,8 +36,8 @@ export default {
   name: "login",
   data: function () {
     return {
-      email: "",
-      password: "",
+      email: "l@test.com",
+      password: "123456",
     };
   },
   methods: {
