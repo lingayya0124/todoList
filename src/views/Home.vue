@@ -246,6 +246,10 @@ export default {
           todo.id = doc.id;
 
           this.todos.push(todo);
+          this.todos = this.todos.sort((b, a) => {
+            return a.createdAt - b.createdAt;
+          });
+          console.log(this.todos);
         });
       });
     },
