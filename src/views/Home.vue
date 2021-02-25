@@ -3,7 +3,7 @@
     <div class="container d-flex justify-content-center">
       <div class="card mt-3 shadow-sm w-100">
         <div class="card-header bg-dark">
-          <b-row>
+          <b-row class="row justify-content-around">
             <b-col md="4">
               <h4 class="">Todo List</h4>
             </b-col>
@@ -11,7 +11,7 @@
               <h3>Welcome {{ name }}</h3>
             </b-col>
             <b-col md="0">
-              <b-button variant="outline-primary float-right" @click="Logout"
+              <b-button variant="outline-primary" @click="Logout"
                 >Logout</b-button
               >
             </b-col>
@@ -79,52 +79,50 @@
 
                   <b-dropdown id="dropdown-1" text="Theme" class="m-xs-1">
                     <div class="btn-group-md bg-dark">
-                      <b-dropdown-item class="default justify content center">
-                        <b-button
-                          v-on:click="
-                            {
-                              todo.color = todo.color = 'white';
-                              theme(todo);
-                            }
-                          "
-                          >Default</b-button
-                        >
+                      <b-dropdown-item
+                        class="default d-flex justify-content-center"
+                        v-on:click="
+                          {
+                            todo.color = todo.color = 'white';
+                            theme(todo);
+                          }
+                        "
+                      >
+                        <i class="fas fa-circle blue" style="color: white"></i>
                       </b-dropdown-item>
                       <b-dropdown-item
+                        class="d-flex"
+                        v-on:click="
+                          {
+                            todo.color = todo.color = 'rgb(129, 172, 236)';
+                            theme(todo);
+                          }
+                        "
                         ><i
                           class="fas fa-circle blue"
-                          style="color: blue"
-                          v-on:click="
-                            {
-                              todo.color = todo.color = 'rgb(129, 172, 236)';
-                              theme(todo);
-                            }
-                          "
+                          style="color: rgb(129, 172, 236)"
                         ></i
                       ></b-dropdown-item>
-                      <b-dropdown-item class="green"
-                        ><i
-                          class="fas fa-circle"
-                          v-on:click="
-                            {
-                              todo.color = todo.color = '#71d316';
-                              theme(todo);
-                            }
-                          "
-                          style="color: green"
-                        ></i
+                      <b-dropdown-item
+                        class="green"
+                        v-on:click="
+                          {
+                            todo.color = todo.color = '#71d316';
+                            theme(todo);
+                          }
+                        "
+                        ><i class="fas fa-circle" style="color: #71d316"></i
                       ></b-dropdown-item>
-                      <b-dropdown-item class="red">
-                        <i
-                          class="fas fa-circle"
-                          v-on:click="
-                            {
-                              todo.color = todo.color = '#f14628';
-                              theme(todo);
-                            }
-                          "
-                          style="color: red"
-                        ></i
+                      <b-dropdown-item
+                        class="red"
+                        v-on:click="
+                          {
+                            todo.color = todo.color = '#f14628';
+                            theme(todo);
+                          }
+                        "
+                      >
+                        <i class="fas fa-circle" style="color: #f14628"></i
                       ></b-dropdown-item>
                     </div>
                   </b-dropdown>
