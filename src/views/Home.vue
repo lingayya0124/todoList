@@ -18,136 +18,157 @@
           </b-row>
         </div>
         <div class="card-body" style="background-color: #4caf50">
-          <div class="input-container row m-0 mt-3">
-            <input
-              type="text"
-              id="new_todo"
-              class="form-control col-md-11 validate"
-              v-model="todo.title"
-              @keyup.enter="addTodo"
-            />
-            <i
-              class="fas fa-plus col-1 fa-2x"
-              style="color: yellow"
-              @click="addTodo"
-            ></i>
-          </div>
-
-          <ul class="list-group mt-3" style="color: #4caf50">
-            <li
-              class="list-group-item d-flex align-items-center justify-content-between"
-              v-for="todo in todos"
-              :key="todo.id"
-              :class="{ fade: todo.isCompleted }"
-              v-bind:style="{ backgroundColor: todo.color }"
-            >
-              <i
-                class="fas fa-minus"
-                style="color:  #4caf50 size:20px"
-                @click="deleteToDo(todo.id)"
-              ></i>
-              <div class="col-sm-7" v-if="currentlyEditing !== todo.id">
+          <b-tabs content-class="mt-3">
+            <b-tab title="Todos" active>
+              <div class="input-container row m-0 mt-3">
                 <input
-                  disabled
                   type="text"
-                  style="font-weight: bold color:white"
-                  class="todo-item-label form-control col-xs-4 border-0"
+                  id="new_todo"
+                  class="form-control col-md-11 validate"
                   v-model="todo.title"
-                  value=" todo.title"
-                  v-bind:style="{
-                    backgroundColor: todo.color,
-                  }"
+                  @keyup.enter="addTodo"
                 />
+                <i
+                  class="fas fa-plus col-1 fa-2x"
+                  style="color: yellow"
+                  @click="addTodo"
+                ></i>
               </div>
-              <div class="col-sm-7" v-else>
-                <input
-                  :disabled="disabled == 1"
-                  type="text"
-                  class="todo-item-label form-control col-xs-4"
+
+              <ul class="list-group mt-3" style="color: black">
+                <li
+                  class="list-group-item d-flex align-items-center justify-content-between"
+                  v-for="todo in todos"
+                  :key="todo.id"
+                  :class="{ fade: todo.isCompleted }"
                   v-bind:style="{ backgroundColor: todo.color }"
-                  v-model="todoEditText"
-                  value=" todoEditText"
-                  @keyup.enter.prevent="updateTodoText(todo.id, $event)"
-                />
-                <div class="justify-content-center">
-                  <b-button
-                    class="mr-1"
-                    variant="success"
-                    @click="updateTodoText(todo.id, $event)"
-                    >Save</b-button
-                  >
-
-                  <b-dropdown id="dropdown-1" text="Theme" class="m-xs-1">
-                    <div class="btn-group-md bg-dark">
-                      <b-dropdown-item
-                        class="default d-flex justify-content-center"
-                        v-on:click="
-                          {
-                            todo.color = todo.color = 'white';
-                            theme(todo);
-                          }
-                        "
-                      >
-                        <i class="fas fa-circle blue" style="color: white"></i>
-                      </b-dropdown-item>
-                      <b-dropdown-item
-                        class="d-flex"
-                        v-on:click="
-                          {
-                            todo.color = todo.color = 'rgb(129, 172, 236)';
-                            theme(todo);
-                          }
-                        "
-                        ><i
-                          class="fas fa-circle blue"
-                          style="color: rgb(129, 172, 236)"
-                        ></i
-                      ></b-dropdown-item>
-                      <b-dropdown-item
-                        class="green"
-                        v-on:click="
-                          {
-                            todo.color = todo.color = '#71d316';
-                            theme(todo);
-                          }
-                        "
-                        ><i class="fas fa-circle" style="color: #71d316"></i
-                      ></b-dropdown-item>
-                      <b-dropdown-item
-                        class="red"
-                        v-on:click="
-                          {
-                            todo.color = todo.color = '#f14628';
-                            theme(todo);
-                          }
-                        "
-                      >
-                        <i class="fas fa-circle" style="color: #f14628"></i
-                      ></b-dropdown-item>
-                    </div>
-                  </b-dropdown>
-                </div>
-              </div>
-
-              <div class="row">
-                <div v-if="disabled == 1 && todo.isCompleted == false">
-                  <i class="fas fa-edit mr-2" @click="editTodo(todo)"></i>
-                </div>
-                <span class="secondary-content">
-                  <label>
+                >
+                  <div>
+                    <i
+                      class="fas fa-minus"
+                      style="color:'black' size: 20px"
+                      @click="deleteToDo(todo.id)"
+                    ></i>
+                  </div>
+                  <div class="col-sm-7" v-if="currentlyEditing !== todo.id">
                     <input
-                      :disabled="disabled == 0"
-                      type="checkbox"
-                      class="filled-in"
-                      :checked="todo.isCompleted"
-                      @change="updateTodoItem(todo.id, $event)"
+                      disabled
+                      type="text"
+                      style="font-weight: bold color:white"
+                      class="todo-item-label form-control col-xs-4 border-0"
+                      v-model="todo.title"
+                      value=" todo.title"
+                      v-bind:style="{
+                        backgroundColor: todo.color,
+                      }"
                     />
-                    <span></span>
-                  </label>
-                </span>
+                  </div>
+                  <div class="col-sm-7" v-else>
+                    <input
+                      :disabled="disabled == 1"
+                      type="text"
+                      class="todo-item-label form-control col-xs-4"
+                      v-bind:style="{ backgroundColor: todo.color }"
+                      v-model="todoEditText"
+                      value=" todoEditText"
+                      @keyup.enter.prevent="updateTodoText(todo.id, $event)"
+                    />
+                    <div class="justify-content-center">
+                      <b-button
+                        class="mr-1"
+                        variant="success"
+                        @click="updateTodoText(todo.id, $event)"
+                        >Save</b-button
+                      >
+
+                      <b-dropdown id="dropdown-1" text="Theme" class="m-xs-1">
+                        <div class="btn-group-md bg-dark">
+                          <b-dropdown-item
+                            class="default d-flex justify-content-center"
+                            v-on:click="
+                              {
+                                todo.color = todo.color = 'white';
+                                theme(todo);
+                              }
+                            "
+                          >
+                            <i
+                              class="fas fa-circle blue"
+                              style="color: white"
+                            ></i>
+                          </b-dropdown-item>
+                          <b-dropdown-item
+                            class="d-flex"
+                            v-on:click="
+                              {
+                                todo.color = todo.color = 'rgb(129, 172, 236)';
+                                theme(todo);
+                              }
+                            "
+                            ><i
+                              class="fas fa-circle blue"
+                              style="color: rgb(129, 172, 236)"
+                            ></i
+                          ></b-dropdown-item>
+                          <b-dropdown-item
+                            class="green"
+                            v-on:click="
+                              {
+                                todo.color = todo.color = '#71d316';
+                                theme(todo);
+                              }
+                            "
+                            ><i class="fas fa-circle" style="color: #71d316"></i
+                          ></b-dropdown-item>
+                          <b-dropdown-item
+                            class="red"
+                            v-on:click="
+                              {
+                                todo.color = todo.color = '#f14628';
+                                theme(todo);
+                              }
+                            "
+                          >
+                            <i class="fas fa-circle" style="color: #f14628"></i
+                          ></b-dropdown-item>
+                        </div>
+                      </b-dropdown>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div v-if="disabled == 1 && todo.isCompleted == false">
+                      <i class="fas fa-edit mr-2" @click="editTodo(todo)"></i>
+                    </div>
+                    <span class="secondary-content">
+                      <label>
+                        <input
+                          :disabled="disabled == 0"
+                          type="checkbox"
+                          class="filled-in"
+                          :checked="todo.isCompleted"
+                          @change="updateTodoItem(todo.id, $event)"
+                        />
+                        <span></span>
+                      </label>
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </b-tab>
+            <b-tab title="Stats" v-on:click="fillData(), barDataFill()">
+              <div class="piechart">
+                <pie-chart
+                  :chart-data="datacollection"
+                  :options="options"
+                ></pie-chart>
               </div>
-            </li>
-          </ul>
+
+              <div class="barchart">
+                <bar-chart :chart-data="barData" :options="options"></bar-chart>
+              </div>
+            </b-tab>
+          </b-tabs>
         </div>
       </div>
     </div>
@@ -161,10 +182,19 @@
 
 <script>
 import firebase from "firebase";
+import PieChart from "./PieChart.js";
+import BarChart from "./BarChart";
 
 export default {
+  components: {
+    PieChart,
+    BarChart,
+  },
   data() {
     return {
+      barData: null,
+      options: null,
+      datacollection: null,
       disabled: 1,
       check: true,
       todos: [],
@@ -179,8 +209,12 @@ export default {
   },
   created() {
     this.getTodos();
+
     this.disabled = this.disabled;
+
+    var ischeck = true;
   },
+
   beforeMount: function () {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -195,7 +229,6 @@ export default {
       var color = todo.color;
       var id = todo.id;
 
-      console.log(color);
       firebase
         .firestore()
         .collection("users")
@@ -210,8 +243,6 @@ export default {
       this.currentlyEditing = todo.id;
       this.todoEditText = todo.title;
       this.disabled = !this.disabled;
-      console.log(this.todoEditText);
-      console.log(this.currentlyEditing);
     },
 
     addTodo() {
@@ -238,7 +269,7 @@ export default {
         .collection("users")
         .doc(firebase.auth().currentUser.uid)
         .collection("todos");
-      console.log(firebase.auth().currentUser);
+
       todosRef.onSnapshot((snap) => {
         this.todos = [];
         snap.forEach((doc) => {
@@ -246,15 +277,90 @@ export default {
           todo.id = doc.id;
 
           this.todos.push(todo);
+
           this.todos = this.todos.sort((b, a) => {
             return a.createdAt - b.createdAt;
           });
-          console.log(this.todos);
         });
       });
     },
+    fillData() {
+      var complete = 0;
+      for (const obj of this.todos) {
+        if (obj.isCompleted === true) {
+          complete++;
+        }
+      }
+
+      var incomplete = 0;
+      incomplete = this.todos.length - complete;
+
+      this.datacollection = {
+        labels: ["completed", "incomplete"],
+
+        datasets: [
+          {
+            label: "Todos Piechart",
+            backgroundColor: ["green", "rgb(228, 53, 53)"],
+            data: [complete, incomplete],
+          },
+        ],
+      };
+    },
+
+    barDataFill() {
+      var white = 0;
+      var red = 0;
+      var blue = 0;
+      var green = 0;
+      for (const obj of this.todos) {
+        if (obj.color === "white") {
+          white++;
+        } else if (obj.color === "#f14628") {
+          red++;
+        } else if (obj.color === "rgb(129, 172, 236)") {
+          blue++;
+        } else if (obj.color === "#71d316") {
+          green++;
+        }
+      }
+      this.barData = {
+        labels: ["white", "blue", "red", "green"],
+
+        datasets: [
+          {
+            label: "Color wise Todos",
+            backgroundColor: [
+              "white",
+              "rgb(129, 172, 236)",
+              "#f14628",
+              "#71d316",
+            ],
+            data: [white, blue, red, green],
+          },
+        ],
+      };
+      this.options = {
+        scales: {
+          yAxes: [
+            {
+              stacked: true,
+              ticks: {
+                beginAtZero: true,
+                min: 0,
+                stepSize: 1,
+              },
+            },
+          ],
+
+          responsive: true,
+          beginAtzero: true,
+          maintainAspectRatio: false,
+        },
+      };
+    },
+
     updateTodoItem(docId, e) {
-      console.log(docId);
       var isChecked = e.target.checked;
       firebase
         .firestore()
@@ -309,5 +415,14 @@ export default {
 .fade {
   text-decoration: line-through;
   opacity: 0.6 !important;
+}
+
+.piechart {
+  max-width: 500px;
+  margin: 50px auto;
+}
+.barchart {
+  max-width: 500px;
+  margin: 50px auto;
 }
 </style>
