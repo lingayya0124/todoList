@@ -157,15 +157,20 @@
               </ul>
             </b-tab>
             <b-tab title="Stats" v-on:click="fillData(), barDataFill()">
-              <div class="piechart">
-                <pie-chart
-                  :chart-data="datacollection"
-                  :options="options"
-                ></pie-chart>
-              </div>
+              <div class="row">
+                <div class="piechart col-6">
+                  <pie-chart
+                    :chart-data="datacollection"
+                    :options="options"
+                  ></pie-chart>
+                </div>
 
-              <div class="barchart">
-                <bar-chart :chart-data="barData" :options="options"></bar-chart>
+                <div class="barchart col-6">
+                  <bar-chart
+                    :chart-data="barData"
+                    :options="options"
+                  ></bar-chart>
+                </div>
               </div>
             </b-tab>
           </b-tabs>
@@ -352,10 +357,6 @@ export default {
               },
             },
           ],
-
-          responsive: true,
-          beginAtzero: true,
-          maintainAspectRatio: false,
         },
       };
     },
