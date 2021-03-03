@@ -30,15 +30,33 @@
 
 
 <script>
+import Vue from "vue";
 import firebase from "firebase";
 import router from "vue-router";
-export default {
+import { mapGetters } from "vuex";
+export default Vue.extend({
   name: "login",
+
+  computed: {
+    ...mapGetters(["user"]),
+    nextRoute() {
+      return this.$route.query.redirect || "/home";
+    },
+  },
+
   data: function () {
     return {
       email: "",
       password: "",
     };
+  },
+
+  watch: {
+    user: function (changedUser) {
+      if (changedUser) {
+        this.$router.replace(this.nextRoute);
+      }
+    },
   },
   methods: {
     login: function (e) {
@@ -46,9 +64,7 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(
-          (user) => {
-            this.$router.push("/");
-          },
+          (user) => {},
           (err) => {
             alert(err.message);
           }
@@ -56,7 +72,7 @@ export default {
       e.preventDefault();
     },
   },
-};
+});
 </script>
      
 <style scoped>

@@ -20,7 +20,7 @@
       />
       <p>
         Have an Account?
-        <router-link class="link" to="/login">Login Here</router-link>
+        <router-link class="link" to="/">Login Here</router-link>
       </p>
     </form>
   </div>
@@ -43,7 +43,7 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(
           (user) => {
-            this.$router.push("/");
+            this.$router.push("/home");
           },
           (err) => {
             alert(err.message);

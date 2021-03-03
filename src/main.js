@@ -6,6 +6,7 @@ import VueRouter from "vue-router";
 import App from "./App.vue";
 import Routes from "./routes";
 import firebase from "firebase";
+import store from "./store";
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -27,9 +28,28 @@ const router = new VueRouter({
 });
 
 firebase.initializeApp(firebaseConfig);
+firebase.auth().onAuthStateChanged((user) => {
+  store.commit("updateUser", { user });
+});
 
 new Vue({
   el: "#app",
   render: (h) => h(App),
-  router: router,
+  router,
+  store,
+});
+
+router.beforeEach((to, _, next) => {
+  if (to.matched.some((routeRecord) => routeRecord.meta.authRequired)) {
+    if (!store.state.user) {
+      next({
+        path: "/",
+        query: { redirect: to.fullPath },
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });

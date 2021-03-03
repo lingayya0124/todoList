@@ -189,12 +189,20 @@
 import firebase from "firebase";
 import PieChart from "./PieChart.js";
 import BarChart from "./BarChart";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
     PieChart,
     BarChart,
   },
+  computed: {
+    ...mapGetters(["user"]),
+    nextRoute() {
+      return this.$route.query.redirect || "/home";
+    },
+  },
+
   data() {
     return {
       barData: null,
@@ -212,6 +220,7 @@ export default {
       name: "",
     };
   },
+
   created() {
     this.getTodos();
 
@@ -225,7 +234,7 @@ export default {
     if (user) {
       this.name = user.email.split("@")[0];
     } else {
-      this.$router.push("/login");
+      this.$router.push("/loading");
     }
   },
 
@@ -405,7 +414,7 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          this.$router.push("/login");
+          this.$router.push("/");
         });
     },
   },
